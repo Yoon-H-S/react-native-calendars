@@ -21,6 +21,8 @@ export interface BasicDayProps extends ViewProps {
   onLongPress?: (date?: DateData) => void;
   /** The date to return from press callbacks */
   date?: string;
+  /** 요일 구분을 위해 요일index 사용 */
+  index?: number;
 
   /** Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates*/
   disableAllTouchEventsForDisabledDays?: boolean;
@@ -46,7 +48,8 @@ const BasicDay = (props: BasicDayProps) => {
     disableAllTouchEventsForInactiveDays,
     accessibilityLabel,
     children,
-    testID
+    testID,
+    index
   } = props;
   const style = useRef(styleConstructor(theme));
   const _marking = marking || {};
@@ -74,15 +77,16 @@ const BasicDay = (props: BasicDayProps) => {
   };
 
   const getContainerStyle = () => {
-    const {customStyles, selectedColor} = _marking;
+    const {customStyles} = _marking;
     const styles = [style.current.base];
 
-    if (isSelected) {
-      styles.push(style.current.selected);
-      if (selectedColor) {
-        styles.push({backgroundColor: selectedColor});
-      }
-    } else if (isToday) {
+    // if (isSelected) {
+    //   styles.push(style.current.selected);
+    //   if (selectedColor) {
+    //     styles.push({backgroundColor: selectedColor});
+    //   }
+    // }
+    if (isToday) {
       styles.push(style.current.today);
     }
 
@@ -98,20 +102,25 @@ const BasicDay = (props: BasicDayProps) => {
   };
 
   const getTextStyle = () => {
-    const {customStyles, selectedTextColor} = _marking;
+    const {customStyles} = _marking;
     const styles = [style.current.text];
 
-    if (isSelected) {
-      styles.push(style.current.selectedText);
-      if (selectedTextColor) {
-        styles.push({color: selectedTextColor});
-      }
-    } else if (isDisabled) {
+    // if (isSelected) {
+    //   styles.push(style.current.selectedText);
+    //   if (selectedTextColor) {
+    //     styles.push({color: selectedTextColor});
+    //   }
+    // }
+    if (isDisabled) {
       styles.push(style.current.disabledText);
     } else if (isToday) {
       styles.push(style.current.todayText);
     } else if (isInactive) {
       styles.push(style.current.inactiveText);
+    } else if (index === 0) {
+      styles.push(style.current.sunText);
+    } else if (index === 6) {
+      styles.push(style.current.satText);
     }
 
     //Custom marking type
@@ -167,12 +176,20 @@ const BasicDay = (props: BasicDayProps) => {
   };
 
   const renderContainer = () => {
+    return (
+      <View style={getContainerStyle()}>
+        {isMultiPeriod ? renderText() : renderContent()}
+      </View>
+    );
+  };
+
+  const renderPeriodsContainer = () => {
     const {activeOpacity} = _marking;
 
     return (
       <TouchableOpacity
         testID={testID}
-        style={getContainerStyle()}
+        style={style.current.container}
         disabled={shouldDisableTouchEvent()}
         activeOpacity={activeOpacity}
         onPress={!shouldDisableTouchEvent() ? _onPress : undefined}
@@ -181,17 +198,9 @@ const BasicDay = (props: BasicDayProps) => {
         accessibilityRole={isDisabled ? undefined : 'button'}
         accessibilityLabel={accessibilityLabel}
       >
-        {isMultiPeriod ? renderText() : renderContent()}
-      </TouchableOpacity>
-    );
-  };
-
-  const renderPeriodsContainer = () => {
-    return (
-      <View style={style.current.container}>
         {renderContainer()}
         {renderMarking()}
-      </View>
+      </TouchableOpacity>
     );
   };
 

@@ -190,7 +190,7 @@ const Calendar = (props: CalendarProps & ContextProp) => {
     );
   };
 
-  const renderDay = (day: XDate, id: number) => {
+  const renderDay = (day: XDate, id: number, index: number) => {
     const dayProps = extractDayProps(props);
 
     if (!sameMonth(day, currentMonth) && hideExtraDays) {
@@ -210,6 +210,7 @@ const Calendar = (props: CalendarProps & ContextProp) => {
           marking={markedDates?.[dateString]}
           onPress={_onDayPress}
           onLongPress={onLongPressDay}
+          index={index}
         />
       </View>
     );
@@ -218,8 +219,9 @@ const Calendar = (props: CalendarProps & ContextProp) => {
   const renderWeek = (days: XDate[], id: number) => {
     const week: JSX.Element[] = [];
 
+    var index: number = 0;
     days.forEach((day: XDate, id2: number) => {
-      week.push(renderDay(day, id2));
+      week.push(renderDay(day, id2, index++));
     }, this);
 
     if (props.showWeekNumbers) {

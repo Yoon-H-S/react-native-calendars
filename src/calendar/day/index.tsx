@@ -27,7 +27,7 @@ export interface DayProps extends BasicDayProps {
 }
 
 const Day = React.memo((props: DayProps) => {
-  const {date, marking, dayComponent, markingType} = props;
+  const {date, marking, dayComponent, markingType, index} = props;
   const _date = date ? new XDate(date) : undefined;
   const _isToday = isToday(_date);
 
