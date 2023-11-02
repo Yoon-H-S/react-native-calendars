@@ -189,7 +189,7 @@ const BasicDay = (props: BasicDayProps) => {
     return (
       <TouchableOpacity
         testID={testID}
-        style={style.current.container}
+        style={[style.current.container, isSelected && style.current.selected]}
         disabled={shouldDisableTouchEvent()}
         activeOpacity={activeOpacity}
         onPress={!shouldDisableTouchEvent() ? _onPress : undefined}
