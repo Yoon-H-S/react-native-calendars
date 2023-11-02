@@ -8,7 +8,7 @@ import Marking, {MarkingProps} from '../marking';
 
 
 export interface BasicDayProps extends ViewProps {
-  state?: DayState;
+  state?: DayState[];
   /** The marking object */
   marking?: MarkingProps;
   /** Date marking style [dot/multi-dot/period/multi-period]. Default = 'dot' */
@@ -53,10 +53,10 @@ const BasicDay = (props: BasicDayProps) => {
   } = props;
   const style = useRef(styleConstructor(theme));
   const _marking = marking || {};
-  const isSelected = _marking.selected || state === 'selected';
-  const isDisabled = typeof _marking.disabled !== 'undefined' ? _marking.disabled : state === 'disabled';
+  const isSelected = _marking.selected || state?.includes('selected');
+  const isDisabled = typeof _marking.disabled !== 'undefined' ? _marking.disabled : state?.includes('disabled');
   const isInactive = _marking?.inactive;
-  const isToday = state === 'today';
+  const isToday = state?.includes('today');
   const isMultiDot = markingType === Marking.markings.MULTI_DOT;
   const isMultiPeriod = markingType === Marking.markings.MULTI_PERIOD;
   const isCustom = markingType === Marking.markings.CUSTOM;
@@ -75,6 +75,20 @@ const BasicDay = (props: BasicDayProps) => {
     }
     return disableTouch;
   };
+
+  const getPeriodsContainerStyle = () => {
+    const styles = [style.current.container];
+
+    if (isDisabled) {
+      styles.push(style.current.disabled);
+    }
+
+    if (isSelected) {
+      styles.push(style.current.selected);
+    }
+
+    return styles;
+  }
 
   const getContainerStyle = () => {
     const {customStyles} = _marking;
@@ -111,9 +125,7 @@ const BasicDay = (props: BasicDayProps) => {
     //     styles.push({color: selectedTextColor});
     //   }
     // }
-    if (isDisabled) {
-      styles.push(style.current.disabledText);
-    } else if (isToday) {
+    if (isToday) {
       styles.push(style.current.todayText);
     } else if (isInactive) {
       styles.push(style.current.inactiveText);
@@ -189,7 +201,7 @@ const BasicDay = (props: BasicDayProps) => {
     return (
       <TouchableOpacity
         testID={testID}
-        style={[style.current.container, isSelected && style.current.selected]}
+        style={getPeriodsContainerStyle()}
         disabled={shouldDisableTouchEvent()}
         activeOpacity={activeOpacity}
         onPress={!shouldDisableTouchEvent() ? _onPress : undefined}
