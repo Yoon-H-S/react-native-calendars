@@ -183,6 +183,12 @@ const CalendarHeader = forwardRef((props: CalendarHeaderProps, ref) => {
         dayStyle.push(style.current[dayTextAtIndex]);
       }
 
+      if (index === 0) {
+        dayStyle.push(style.current.sunText);
+      } else if (index === 6) {
+        dayStyle.push(style.current.satText);
+      }
+
       return (
         <Text allowFontScaling={false} key={index} style={dayStyle} numberOfLines={1} accessibilityLabel={''}>
           {day}
