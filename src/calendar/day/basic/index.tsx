@@ -116,7 +116,7 @@ const BasicDay = (props: BasicDayProps) => {
   };
 
   const getTextStyle = () => {
-    const {customStyles} = _marking;
+    const {customStyles, rest} = _marking;
     const styles = [style.current.text];
 
     // if (isSelected) {
@@ -129,7 +129,7 @@ const BasicDay = (props: BasicDayProps) => {
       styles.push(style.current.todayText);
     } else if (isInactive) {
       styles.push(style.current.inactiveText);
-    } else if (index === 0) {
+    } else if (index === 0 || rest) {
       styles.push(style.current.sunText);
     } else if (index === 6) {
       styles.push(style.current.satText);

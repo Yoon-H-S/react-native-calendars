@@ -1,6 +1,6 @@
 import filter from 'lodash/filter';
 import React, {useRef} from 'react';
-import {View, ViewStyle, TextStyle, StyleProp} from 'react-native';
+import {View, ViewStyle, TextStyle, StyleProp, Text} from 'react-native';
 
 import {Theme, MarkingTypes} from '../../../types';
 import {extractDotProps} from '../../../componentUpdater';
@@ -28,7 +28,7 @@ type DOT = {
 
 type PERIOD = {
   color: string;
-  startingDay?: boolean;
+  startingDay?: string;
   endingDay?: boolean;
 };
 
@@ -52,10 +52,12 @@ export interface MarkingProps extends DotProps {
   dots?: DOT[];
   //multi-period
   periods?: PERIOD[];
-  startingDay?: boolean;
+  startingDay?: string;
   endingDay?: boolean;
   accessibilityLabel?: string;
   customStyles?: CustomStyle;
+  // rest-marking
+  rest?: boolean;
 }
 
 const Marking = (props: MarkingProps) => {
@@ -98,13 +100,17 @@ const Marking = (props: MarkingProps) => {
         backgroundColor: color
       }
     ];
-    if (startingDay) {
+    if (startingDay !== undefined || startingDay !== null) {
       styles.push(style.current.startingDay);
     }
     if (endingDay) {
       styles.push(style.current.endingDay);
     }
-    return <View key={index} style={styles}/>;
+    return (
+      <View key={index} style={styles}>
+        <Text style={style.current.text}>{startingDay}</Text>
+      </View>
+    );
   };
 
   const renderDot = (index?: number, item?: any) => {
