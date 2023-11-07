@@ -32,6 +32,11 @@ type PERIOD = {
   endingDay?: boolean;
 };
 
+type LUNAR = {
+  date?: string;
+  leap?: string;
+}
+
 export interface MarkingProps extends DotProps {
   type?: MarkingTypes;
   theme?: Theme;
@@ -58,6 +63,8 @@ export interface MarkingProps extends DotProps {
   customStyles?: CustomStyle;
   // rest-marking
   rest?: boolean;
+  // 음력 표시
+  lunar?: LUNAR;
 }
 
 const Marking = (props: MarkingProps) => {

@@ -151,6 +151,16 @@ const BasicDay = (props: BasicDayProps) => {
     onLongPress?.(dateData);
   }, [onLongPress, date]);
 
+  const renderLunar = () => {
+    const {lunar} = _marking;
+
+    return(
+      <Text style={style.current.lunarText}>
+        {lunar?.leap === "윤" && "윤달 "}{lunar?.date}
+      </Text>
+    );
+  }
+
   const renderMarking = () => {
     const {marked, dotColor, dots, periods} = _marking;
 
@@ -211,6 +221,7 @@ const BasicDay = (props: BasicDayProps) => {
         accessibilityLabel={accessibilityLabel}
       >
         {renderContainer()}
+        {renderLunar()}
         {renderMarking()}
       </TouchableOpacity>
     );
