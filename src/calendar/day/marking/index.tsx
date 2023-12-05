@@ -107,15 +107,18 @@ const Marking = (props: MarkingProps) => {
         backgroundColor: color
       }
     ];
-    if (startingDay !== undefined || startingDay !== null) {
+    if (startingDay !== undefined && startingDay !== null) {
       styles.push(style.current.startingDay);
+    } else {
+      styles.push({position: 'relative', left: '-10%', width: '106%'});
     }
     if (endingDay) {
       styles.push(style.current.endingDay);
     }
+    
     return (
       <View key={index} style={styles}>
-        <Text style={style.current.text}>{startingDay}</Text>
+        <Text style={style.current.text}>{startingDay ? startingDay : ' '}</Text>
       </View>
     );
   };

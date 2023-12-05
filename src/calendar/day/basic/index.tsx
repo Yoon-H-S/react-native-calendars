@@ -1,5 +1,5 @@
 import React, {Fragment, useCallback, useRef} from 'react';
-import {TouchableOpacity, Text, View, ViewProps} from 'react-native';
+import {TouchableWithoutFeedback, Text, View, ViewProps} from 'react-native';
 
 import {xdateToData} from '../../../interface';
 import {Theme, DayState, MarkingTypes, DateData} from '../../../types';
@@ -206,24 +206,23 @@ const BasicDay = (props: BasicDayProps) => {
   };
 
   const renderPeriodsContainer = () => {
-    const {activeOpacity} = _marking;
-
     return (
-      <TouchableOpacity
+      <TouchableWithoutFeedback 
         testID={testID}
-        style={getPeriodsContainerStyle()}
         disabled={shouldDisableTouchEvent()}
-        activeOpacity={activeOpacity}
+        // activeOpacity={activeOpacity}
         onPress={!shouldDisableTouchEvent() ? _onPress : undefined}
         onLongPress={!shouldDisableTouchEvent() ? _onLongPress : undefined}
         accessible
         accessibilityRole={isDisabled ? undefined : 'button'}
         accessibilityLabel={accessibilityLabel}
       >
-        {renderContainer()}
-        {renderLunar()}
-        {renderMarking()}
-      </TouchableOpacity>
+        <View style={getPeriodsContainerStyle()}>
+          {renderContainer()}
+          {renderLunar()}
+          {renderMarking()}
+        </View>
+      </TouchableWithoutFeedback>
     );
   };
 
